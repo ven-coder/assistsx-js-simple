@@ -1,0 +1,23 @@
+{
+  "name": "ax-simple",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ax-web-dev": "file:../ax-web-dev",
+    "rxjs": "^7.8.2",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/compiler-sfc": "^3.5.13",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0",
+    "vue-tsc": "^2.2.8"
+  }
+}
