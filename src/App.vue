@@ -66,16 +66,18 @@ const collectAccountInfo = async () => {
   ])
   StepManager.register(steps)
 
-  try {
-    await StepManager.run("1")
-  } catch (error) {
+  StepManager.run("1").then(() => {
+    AssistsX.overlayToast('执行结束')
+  }).catch((error) => {
     console.error(error)
-  }
+    AssistsX.overlayToast('执行失败：' + error)
 
+  })
   AssistsX.overlayToast('开始执行')
 }
 
 const stopCollectAccountInfo = async () => {
+  StepManager.stop()
   AssistsX.overlayToast('停止执行')
 }
 
