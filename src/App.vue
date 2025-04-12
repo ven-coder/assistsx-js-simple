@@ -1,83 +1,66 @@
 <script setup lang="ts">
-import { AssistsX, NodeClassValue, sleep, Step, StepManager } from 'ax-web-dev'
+import { AssistsX, NodeClassValue, sleep, Step } from 'ax-web-dev'
 import { CancelableTask, mainCollectAccountInfo } from './CollectWechatAccountInfo'
 
 const targetPackageName = "com.tencent.mm"
 
 let task: CancelableTask | null = null
-const collectAccountInfo = async () => {
 
+const launchWechat = async (step: Step): Promise<Step | undefined> => {
+  // 启动微信
+  step.launchApp(targetPackageName);
 
-  const steps = new Map([
-    ["1", async (step: Step) => {
-      // 启动微信
-      AssistsX.launchApp(targetPackageName);
-      return step.next("2")
-    }],
-    ["2", async (step: Step) => {
-      // 检查微信是否打开
-      for (let i = 0; i < 5; i++) {
-        const packageName = AssistsX.getPackageName();
-        if (packageName === targetPackageName) {
-          break;
+  return step.next({ impl: checkWechatOpen, delay: 2000 })
+}
+
+const checkWechatOpen = async (step: Step): Promise<Step | undefined> => {
+  const node = step.findById("com.miui.securitycore:id/app1");
+  if (node[0]) {
+    node[0].click();
+  }
+  return step.next({ impl: collectAccountInfo })
+}
+
+const collectAccountInfo = async (step: Step): Promise<Step | undefined> => {
+  // 检查微信状态
+  const packageName = step.getPackageName();
+  if (packageName !== targetPackageName) {
+    AssistsX.overlayToast("微信打开失败");
+    return undefined
+  }
+  const nodes = step.findByTags(NodeClassValue.RelativeLayout, "", "com.tencent.mm:id/huj", "");
+  if (nodes.length > 0) {
+    const meNodes = step.findByTags(NodeClassValue.TextView, "我", "com.tencent.mm:id/icon_tv", "");
+    if (meNodes.length > 0) {
+      const node = meNodes[0].findFirstParentClickable();
+      if (node) {
+        node.click();
+        await step.sleep(1000);
+
+        // 获取账号信息
+        const infoNodes = step.findById("com.tencent.mm:id/ouv");
+        if (infoNodes.length > 0) {
+          AssistsX.overlayToast(infoNodes[0].text);
+          await step.sleep(2000);
         }
-
-        const node = AssistsX.findById("com.miui.securitycore:id/app1");
-        if (node[0]) {
-          node[0].click();
-          break;
-        }
-
-        await step.sleep(1000)
       }
-      return step.next("3")
-    }],
-    ["3", async (step: Step) => {
-      // 检查微信状态
-      const packageName = AssistsX.getPackageName();
-      if (packageName !== targetPackageName) {
-        AssistsX.overlayToast("微信打开失败");
-        return step.next("3")
-      }
-      return step.next("4")
-    }],
-    ["4", async (step: Step) => {
-      const nodes = AssistsX.findByTags(NodeClassValue.RelativeLayout, "", "com.tencent.mm:id/huj", "");
-      if (nodes.length > 0) {
-        const meNodes = AssistsX.findByTags(NodeClassValue.TextView, "我", "com.tencent.mm:id/icon_tv", "");
-        if (meNodes.length > 0) {
-          const node = meNodes[0].findFirstParentClickable();
-          if (node) {
-            node.click();
-            await step.sleep(1000);
+    }
+  } else {
+    step.back();
+  }
+}
 
-            // 获取账号信息
-            const infoNodes = AssistsX.findById("com.tencent.mm:id/ouv");
-            if (infoNodes.length > 0) {
-              AssistsX.overlayToast(infoNodes[0].text);
-            }
-          }
-        }
-      } else {
-        AssistsX.back();
-      }
-      return step.next("5")
-    }],
-  ])
-  StepManager.register(steps)
-
-  StepManager.run("1").then(() => {
+const startCollectAccountInfo = async () => {
+  Step.run(launchWechat).then(() => {
     AssistsX.overlayToast('执行结束')
   }).catch((error) => {
     console.error(error)
     AssistsX.overlayToast('执行失败：' + error)
-
   })
-  AssistsX.overlayToast('开始执行')
 }
 
 const stopCollectAccountInfo = async () => {
-  StepManager.stop()
+  Step.stop()
   AssistsX.overlayToast('停止执行')
 }
 
@@ -85,7 +68,7 @@ const stopCollectAccountInfo = async () => {
 
 <template>
   <div class="container">
-    <button type="button" @click="collectAccountInfo">抓取微信1账号信息</button>
+    <button type="button" @click="startCollectAccountInfo">抓取微信1账号信息</button>
     <button type="button" @click="stopCollectAccountInfo">停止执行</button>
   </div>
 </template>
