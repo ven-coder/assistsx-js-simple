@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { useLogStore } from '../stores/logStore'
 import { Step, useStepStore } from 'ax-web-dev'
+import type { LogItem } from '../stores/logStore'
 
 const router = useRouter()
 const logStore = useLogStore()
@@ -30,16 +31,16 @@ onUnmounted(() => {
   document.title = originalTitle
 })
 
-// 暴露方法给父组件
-defineExpose({
-  addLog: logStore.addLog,
-  clearLogs: logStore.clearLogs
-})
-
 const stopStep = () => {
   Step.stop()
-  logStore.addLog('主动停止')
+  logStore.addTextLog('主动停止')
 }
+
+// 暴露方法给父组件
+defineExpose({
+  addLog: logStore.addTextLog,
+  clearLogs: logStore.clearLogs
+})
 
 </script>
 
@@ -51,12 +52,22 @@ const stopStep = () => {
           <Icon icon="mdi:arrow-left" width="24" />
         </button>
         <button @click="stopStep" style="background-color: red;" v-if="!showBackButton">停止</button>
-        <button @click="logStore.clearLogs">清空日志</button>
+        <!-- <button @click="logStore.clearLogs">清空日志</button> -->
       </div>
     </div>
     <div class="log-content">
       <div v-for="(log, index) in logStore.logs" :key="index" class="log-item">
-        {{ log }}
+        <div class="log-time">{{ log.time }}</div>
+        <div class="log-content-wrapper">
+          <div v-for="(content, contentIndex) in log.contents" :key="contentIndex" class="content-item">
+            <template v-if="content.type === 'text'">
+              {{ content.content }}
+            </template>
+            <template v-else-if="content.type === 'image'">
+              <img :src="content.content" class="log-image" />
+            </template>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -73,7 +84,7 @@ const stopStep = () => {
 }
 
 .log-header {
-  padding: 10px;
+  padding: 0px 0px 0px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -108,8 +119,26 @@ const stopStep = () => {
 
 .log-item {
   font-family: monospace;
-  padding: 4px 0;
-  /* border-bottom: 1px solid #333; */
+  padding-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-time {
+  color: #fff;
+  font-size: 0.9em;
+}
+
+.log-content-wrapper {
+  padding-left: 0px;
+}
+
+.log-image {
+  max-width: 100%;
+  max-height: 100px;
+  border-radius: 4px;
+  margin: 0px 0;
 }
 
 button {
@@ -123,5 +152,13 @@ button {
 
 button:hover {
   background-color: #747bff;
+}
+
+.content-item {
+  margin-bottom: 0px;
+}
+
+.content-item:last-child {
+  margin-bottom: 0;
 }
 </style>

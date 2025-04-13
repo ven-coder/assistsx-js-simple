@@ -3,5 +3,6 @@
     "version": "1.0.0",
     "description": "AssistsX示例",
     "isShowOverlay": true,
+    "needScreenCapture": true,
     "overlayTitle": "AssistsX示例"
 }
