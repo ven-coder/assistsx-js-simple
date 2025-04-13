@@ -10,7 +10,7 @@ const stepStore = useStepStore()
 
 const startCollectAccountInfo = async () => {
   useLogStore().clearLogs()
-  Step.run(launchWechat).then(() => {
+  Step.run(launchWechat, { delayMs: 1000 }).then(() => {
     useLogStore().addTextLog('执行结束')
   }).catch((error) => {
     useLogStore().addTextLog('执行失败：' + error)
@@ -25,7 +25,7 @@ const goToLogs = () => {
 
 <template>
   <div class="container">
-    <button type="button" @click="startCollectAccountInfo">执行</button>
+    <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
   </div>
 </template>
 

@@ -84,7 +84,7 @@ defineExpose({
 }
 
 .log-header {
-  padding: 0px 0px 0px 10px;
+  padding: 10px 0px 0px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -147,7 +147,7 @@ button {
   color: white;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 button:hover {
