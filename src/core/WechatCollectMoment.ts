@@ -5,7 +5,7 @@ import { setWechatEnterNext, launchWechat, wechatPackageName } from "./WechatEnt
 export const start = () => {
     useLogStore().clearLogs()
     setWechatEnterNext(async (step: Step) => {
-        return step.next(switchMe)
+        return step.next(switchDiscover)
     })
     Step.run(launchWechat, { delayMs: 1000 }).then(() => {
         useLogStore().addTextLog('执行结束')
@@ -14,7 +14,7 @@ export const start = () => {
     })
 }
 
-export const switchMe = async (step: Step): Promise<Step | undefined> => {
+const switchDiscover = async (step: Step): Promise<Step | undefined> => {
     const packageName = step.getPackageName();
     if (packageName !== wechatPackageName) {
         useLogStore().addTextLog('微信打开失败')
@@ -28,17 +28,17 @@ export const switchMe = async (step: Step): Promise<Step | undefined> => {
         return step.repeat()
     }
 
-    const meNode = bottomBarNode.findByTags(NodeClassValue.TextView, { filterText: "我", filterViewId: "com.tencent.mm:id/icon_tv", })[0];
+    const meNode = bottomBarNode.findByTags(NodeClassValue.TextView, { filterText: "发现", filterViewId: "com.tencent.mm:id/icon_tv", })[0];
     const result = meNode.findFirstParentClickable().click();
     if (result) {
-        useLogStore().addTextLog('点击"我"')
+        useLogStore().addTextLog('点击"发现"')
     } else {
-        useLogStore().addTextLog('点击"我"失败')
+        useLogStore().addTextLog('点击"发现"失败')
     }
-    return step.next(collectAccountInfo)
+    return step.next(collectMoment)
 }
 
-export const collectAccountInfo = async (step: Step): Promise<Step | undefined> => {
+export const collectMoment = async (step: Step): Promise<Step | undefined> => {
     const accountNode = step.findById("com.tencent.mm:id/gxv")[0]
 
     const nickName = accountNode.findById("com.tencent.mm:id/kbb")[0].text

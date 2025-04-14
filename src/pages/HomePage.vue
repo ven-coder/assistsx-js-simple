@@ -2,19 +2,20 @@
 import { AssistsX, NodeClassValue, sleep, Step } from 'ax-web-dev'
 import { useRouter } from 'vue-router'
 import { useStepStore } from 'ax-web-dev'
-import { launchWechat } from '../core/WechatCollectAccountInfo'
 import { useLogStore } from '@/stores/logStore'
+import { start as startAccountInfo } from '@/core/WechatCollectAccountInfo'
+import { start as startMoment } from '@/core/WechatCollectMoment'
 
 const router = useRouter()
 const stepStore = useStepStore()
 
 const startCollectAccountInfo = async () => {
-  useLogStore().clearLogs()
-  Step.run(launchWechat, { delayMs: 1000 }).then(() => {
-    useLogStore().addTextLog('执行结束')
-  }).catch((error) => {
-    useLogStore().addTextLog('执行失败：' + error)
-  })
+  startAccountInfo()
+  goToLogs()
+}
+
+const startCollectMoment = async () => {
+  startMoment()
   goToLogs()
 }
 
@@ -26,6 +27,8 @@ const goToLogs = () => {
 <template>
   <div class="container">
     <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
+    <button type="button" @click="startCollectMoment">收集朋友圈</button>
+    <button type="button" @click="startCollectAccountInfo">批量取关公众号</button>
   </div>
 </template>
 
