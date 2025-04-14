@@ -51,14 +51,16 @@ const switchMe = async (step: Step): Promise<Step | undefined> => {
 export const collectAccountInfo = async (step: Step): Promise<Step | undefined> => {
 
     const accountNode = step.findById("com.tencent.mm:id/gxv")[0]
-    const avatarBase64 = accountNode.findById("com.tencent.mm:id/a_4")[0].takeScreenshot()
-    useLogStore().addMixedLog([{ type: "text", content: "头像" }, { type: "image", content: avatarBase64 }])
+
+
+    const nickName = accountNode.findById("com.tencent.mm:id/kbb")[0].text
+    useLogStore().addTextLog("昵称：" + nickName)
 
     const wechatNo = accountNode.findById("com.tencent.mm:id/ouv")[0].text;
     useLogStore().addTextLog(wechatNo)
 
-    const nickName = accountNode.findById("com.tencent.mm:id/kbb")[0].text
-    useLogStore().addTextLog("昵称：" + nickName)
+    const avatarBase64 = accountNode.findById("com.tencent.mm:id/a_4")[0].takeScreenshot()
+    useLogStore().addMixedLog([{ type: "text", content: "头像" }, { type: "image", content: avatarBase64 }])
 
     return undefined
 }
