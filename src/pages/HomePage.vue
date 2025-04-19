@@ -22,6 +22,12 @@ const startCollectMoment = async () => {
 const goToLogs = () => {
   router.push('/logs')
 }
+
+const test = async () => {
+  const allNodes = AssistsX.getAllNodes()
+  const screenshot = await allNodes[0].takeScreenshot()
+  console.log(screenshot)
+}
 </script>
 
 <template>
@@ -29,6 +35,7 @@ const goToLogs = () => {
     <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
     <button type="button" @click="startCollectMoment">收集朋友圈</button>
     <button type="button" @click="startCollectAccountInfo">批量取关公众号</button>
+    <button type="button" @click="test">测试</button>
   </div>
 </template>
 

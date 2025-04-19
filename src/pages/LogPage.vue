@@ -33,14 +33,20 @@ onUnmounted(() => {
 
 const stopStep = () => {
   Step.stop()
-  logStore.addTextLog('主动停止')
+  logStore.add({ images: [], text: '主动停止' })
 }
 
 // 暴露方法给父组件
 defineExpose({
-  addLog: logStore.addTextLog,
+  addLog: logStore.add,
   clearLogs: logStore.clearLogs
 })
+
+// 处理图片点击
+const handleImageClick = (imageUrl: string) => {
+  // 可以在这里添加图片预览逻辑
+  window.open(imageUrl, '_blank')
+}
 
 </script>
 
@@ -59,13 +65,12 @@ defineExpose({
       <div v-for="(log, index) in logStore.logs" :key="index" class="log-item">
         <div class="log-time">{{ log.time }}</div>
         <div class="log-content-wrapper">
-          <div v-for="(content, contentIndex) in log.contents" :key="contentIndex" class="content-item">
-            <template v-if="content.type === 'text'">
-              {{ content.content }}
-            </template>
-            <template v-else-if="content.type === 'image'">
-              <img :src="content.content" class="log-image" />
-            </template>
+          <!-- 文本内容 -->
+          <div class="log-text" v-if="log.text">{{ log.text }}</div>
+          <!-- 图片网格 -->
+          <div class="image-grid" v-if="log.images && log.images.length > 0">
+            <img v-for="(image, imageIndex) in log.images" :key="imageIndex" :src="image" class="log-image"
+              @click="() => handleImageClick(image)" />
           </div>
         </div>
       </div>
@@ -132,13 +137,34 @@ defineExpose({
 
 .log-content-wrapper {
   padding-left: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.log-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
 }
 
 .log-image {
-  max-width: 100%;
-  max-height: 100px;
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
   border-radius: 4px;
-  margin: 0px 0;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.log-image:hover {
+  transform: scale(1.02);
 }
 
 button {

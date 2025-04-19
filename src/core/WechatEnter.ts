@@ -9,10 +9,10 @@ export const setWechatEnterNext = (next: (step: Step) => Promise<Step | undefine
 }
 
 export const launchWechat = async (step: Step): Promise<Step | undefined> => {
-    useLogStore().addTextLog('开始执行')
+    useLogStore().add({ images: [], text: '开始执行' })
     await step.delay(1000)
     step.launchApp(wechatPackageName);
-    useLogStore().addTextLog('启动微信')
+    useLogStore().add({ images: [], text: '启动微信' })
     return step.next(async (step) => await checkDoubleWechatOpen(step), { delayMs: 2000 })
 }
 
@@ -20,7 +20,7 @@ const checkDoubleWechatOpen = async (step: Step): Promise<Step | undefined> => {
     const node = step.findById("com.miui.securitycore:id/app1");
     if (node[0]) {
         node[0].click();
-        useLogStore().addTextLog('微信双开，选择微信1')
+        useLogStore().add({ images: [], text: '微信双开，选择微信1' })
         return step.next(async (step) => await checkMain(step), { delayMs: 2000 })
     }
     return step.next(async (step) => await checkMain(step), { delayMs: 1000 })
@@ -29,13 +29,13 @@ const checkDoubleWechatOpen = async (step: Step): Promise<Step | undefined> => {
 const checkMain = async (step: Step): Promise<Step | undefined> => {
     const packageName = step.getPackageName();
     if (packageName !== wechatPackageName) {
-        useLogStore().addTextLog('微信打开失败')
+        useLogStore().add({ images: [], text: '微信打开失败' })
         return undefined
     }
 
     const bottomBarNode = step.findByTags(NodeClassValue.RelativeLayout, { filterViewId: "com.tencent.mm:id/huj" })[0];
     if (!bottomBarNode) {
-        useLogStore().addTextLog('微信底部栏未找到，尝试返回重试')
+        useLogStore().add({ images: [], text: '微信底部栏未找到，尝试返回重试' })
         step.back();
         return step.repeat()
     }
