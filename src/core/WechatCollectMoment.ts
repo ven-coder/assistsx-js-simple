@@ -57,16 +57,10 @@ export const collectMoment = async (step: Step): Promise<Step | undefined> => {
     for (let i = 0; i < children.length; i++) {
         const child = children[i]
         if (child.className === NodeClassValue.LinearLayout) {
-            const avatarNode = child.findById("com.tencent.mm:id/od")[0]
             const nicknameNode = child.findById("com.tencent.mm:id/kbq")[0]
 
             const nickname = nicknameNode.text
             useLogStore().add({ images: [], text: "昵称：" + nickname })
-
-            const avatarBase64 = await avatarNode.takeScreenshot()
-            useLogStore().add({ images: [avatarBase64], text: "头像" })
-
-            await step.delay(1000)
 
             const nodes = child.getNodes()
             const imageNodes: Node[] = []
@@ -87,10 +81,15 @@ export const collectMoment = async (step: Step): Promise<Step | undefined> => {
             const images = await step.takeScreenshotNodes(imageNodes)
 
             useLogStore().add({ images: images, text: text })
+
+            await step.delay(1000)
         }
     }
 
-
-
+    if (step.repeatCount < 3) {
+        listNode.scrollForward()
+        useLogStore().add({ images: [], text: '翻页' })
+        return step.repeat()
+    }
     return undefined
 }

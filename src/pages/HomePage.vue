@@ -24,9 +24,17 @@ const goToLogs = () => {
 }
 
 const test = async () => {
-  const allNodes = AssistsX.getAllNodes()
-  const screenshot = await allNodes[0].takeScreenshot()
-  console.log(screenshot)
+  const listNode = AssistsX.findById("com.tencent.mm:id/hbs")[0]
+  const children = listNode.getChildren()
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i]
+    if (child.className === NodeClassValue.LinearLayout) {
+      const node = child.findById("com.tencent.mm:id/od")[0]
+      // const node = child.findById("com.tencent.mm:id/kbq")[0]
+      const isFullyVisible = node.isFullyVisible()
+      console.log(isFullyVisible)
+    }
+  }
 }
 </script>
 

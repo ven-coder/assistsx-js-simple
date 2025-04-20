@@ -5,7 +5,7 @@ import { setWechatEnterNext, launchWechat, wechatPackageName } from "./WechatEnt
 export const start = () => {
     useLogStore().clearLogs()
     setWechatEnterNext(async (step: Step) => {
-        return step.next(switchMe)
+        return step.next(switchMe, { delayMs: 0 })
     })
     Step.run(launchWechat, { delayMs: 1000 }).then(() => {
         useLogStore().add({ images: [], text: '执行结束' })
