@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import LogPage from '../pages/LogPage.vue'
+import UnfollowOfficialAccountPage from '../pages/UnfollowOfficialAccountPage.vue'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -14,6 +15,11 @@ const router = createRouter({
             path: '/logs',
             name: 'logs',
             component: LogPage
+        },
+        {
+            path: '/unfollow-official-account',
+            name: 'UnfollowOfficialAccount',
+            component: UnfollowOfficialAccountPage
         }
     ]
 })

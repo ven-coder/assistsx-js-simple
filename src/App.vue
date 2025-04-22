@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import { AssistsX, NodeClassValue, sleep, Step } from 'ax-web-dev'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import LogPage from './pages/LogPage.vue'
+import { useRouter } from 'vue-router'
+import { useNavigationStore } from './stores/navigationStore'
 
 const targetPackageName = "com.tencent.mm"
 const showLogs = ref(false)
 const logRef = ref()
+const router = useRouter()
+const navigationStore = useNavigationStore()
 
 const launchWechat = async (step: Step): Promise<Step | undefined> => {
   // 启动微信
@@ -82,10 +86,17 @@ const openLogs = () => {
 const closeLogs = () => {
   showLogs.value = false
 }
+
+watch(() => navigationStore.targetRoute, (newRoute) => {
+  if (newRoute) {
+    router.push(newRoute)
+    navigationStore.setTargetRoute('')
+  }
+})
 </script>
 
 <template>
-  <router-view></router-view>
+  <router-view />
 </template>
 
 <style>

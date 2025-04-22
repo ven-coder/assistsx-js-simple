@@ -5,6 +5,9 @@ import { useStepStore } from 'ax-web-dev'
 import { useLogStore } from '@/stores/logStore'
 import { start as startAccountInfo } from '@/core/WechatCollectAccountInfo'
 import { start as startMoment } from '@/core/WechatCollectMoment'
+import { start as startWechatUnfollowOfficialAccount } from '@/core/WechatUnfollowOfficialAccount'
+import { start as startWechatCollectOfficialAccount } from '@/core/WechatCollectOfficialAccount'
+import { useNavigationStore } from '@/stores/navigationStore'
 
 const router = useRouter()
 const stepStore = useStepStore()
@@ -18,22 +21,37 @@ const startCollectMoment = async () => {
   startMoment()
   goToLogs()
 }
+const startUnfollowOfficialAccount = async () => {
+  startWechatCollectOfficialAccount()
+  goToLogs()
+}
 
 const goToLogs = () => {
   router.push('/logs')
 }
 
 const test = async () => {
-  const listNode = AssistsX.findById("com.tencent.mm:id/hbs")[0]
-  const children = listNode.getChildren()
-  for (let i = 0; i < children.length; i++) {
-    const child = children[i]
-    if (child.className === NodeClassValue.LinearLayout) {
-      const node = child.findById("com.tencent.mm:id/od")[0]
-      // const node = child.findById("com.tencent.mm:id/kbq")[0]
-      const isFullyVisible = node.isFullyVisible()
-      console.log(isFullyVisible)
+  useLogStore().clearLogs()
+  useNavigationStore().setTargetRoute('/logs')
+  const listNode = AssistsX.findById("com.tencent.mm:id/i3y", { filterClass: "android.widget.ListView" })[0]
+  const nodes = listNode.getChildren()
+  for (let i = 0; i < nodes.length; i++) {
+    const child = nodes[i]
+    if (child.className != NodeClassValue.LinearLayout) {
+      continue
     }
+    const name = child.findById("com.tencent.mm:id/awx")[0].text
+    // if (officialAccountList.includes(name)) {
+    if (name === "考拉解析") {
+      const result = await child.nodeGestureClick()
+      if (result) {
+        useLogStore().add({ images: [], text: `点击公众号:${name}成功, ${child.isClickable}` })
+      } else {
+        useLogStore().add({ images: [], text: `点击公众号:${name}失败, ${child.isClickable}` })
+      }
+      break
+    }
+
   }
 }
 </script>
@@ -42,8 +60,9 @@ const test = async () => {
   <div class="container">
     <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
     <button type="button" @click="startCollectMoment">收集朋友圈</button>
-    <button type="button" @click="startCollectAccountInfo">批量取关公众号</button>
-    <button type="button" @click="test">测试</button>
+    <button type="button" @click="startUnfollowOfficialAccount">批量取关公众号</button>
+    <button type="button" @click="startWechatUnfollowOfficialAccount">测试</button>
+    <!-- <button type="button" @click="test">测试</button> -->
   </div>
 </template>
 
