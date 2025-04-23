@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { ElButton, ElCheckbox } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
@@ -32,13 +32,18 @@ import { start as startWechatUnfollowOfficialAccount } from '@/core/WechatUnfoll
 const router = useRouter()
 const officialAccounts = ref(officialAccountList)
 const selectedAccounts = ref<string[]>([])
+const originalTitle = document.title
+
 // 页面挂载时修改标题
 onMounted(() => {
     document.title = '选择要取消关注的公众号'
 })
+// 页面卸载时恢复原标题
+onUnmounted(() => {
+    document.title = originalTitle
+})
 const handleUnfollow = () => {
-    // TODO: 实现取消关注的逻辑
-    startWechatUnfollowOfficialAccount()
+    startWechatUnfollowOfficialAccount(selectedAccounts.value)
 }
 
 const handleCancel = () => {

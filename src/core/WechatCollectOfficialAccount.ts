@@ -51,13 +51,18 @@ export const enterOfficialAccount = async (step: Step): Promise<Step | undefined
         }
     }
     await step.delay(1000)
-    const clickResult = step.findById("com.tencent.mm:id/sct", { filterText: "公众号" })[0].findFirstParentClickable().click();
+    const officialAccountNode = step.findById("com.tencent.mm:id/sct", { filterText: "公众号" })[0]
+    if (!officialAccountNode) {
+        useLogStore().add({ images: [], text: '未找到公众号入口' })
+        return undefined
+    }
+    const clickResult = officialAccountNode.findFirstParentClickable().click();
     if (clickResult) {
         useLogStore().add({ images: [], text: '点击"公众号"' })
     } else {
         useLogStore().add({ images: [], text: '点击"公众号"失败' })
     }
-
+    officialAccountList.length = 0
     return step.next(collectOfficialAccounts)
 }
 

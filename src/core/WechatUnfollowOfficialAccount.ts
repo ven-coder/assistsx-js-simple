@@ -4,7 +4,11 @@ import { setWechatEnterNext, launchWechat, wechatPackageName } from "./WechatEnt
 import { useNavigationStore } from "../stores/navigationStore";
 import { officialAccountList } from "./WechatCollectOfficialAccount";
 
-export const start = () => {
+// 存储要取消关注的公众号列表
+let accountsToUnfollow: string[] = [];
+
+export const start = (accounts: string[]) => {
+    accountsToUnfollow = [...accounts];
     useLogStore().clearLogs()
     useNavigationStore().setTargetRoute('/logs')
     setWechatEnterNext(async (step: Step) => {
@@ -64,7 +68,6 @@ export const enterOfficialAccount = async (step: Step): Promise<Step | undefined
 }
 
 export const enterOfficialAccountConversation = async (step: Step): Promise<Step | undefined> => {
-
     const listNode = step.findById("com.tencent.mm:id/i3y", { filterClass: "android.widget.ListView" })[0]
     const nodes = listNode.getChildren()
     for (let i = 0; i < nodes.length; i++) {
@@ -73,14 +76,12 @@ export const enterOfficialAccountConversation = async (step: Step): Promise<Step
             continue
         }
         const name = child.findById("com.tencent.mm:id/awx")[0].text
-        if (officialAccountList.includes(name)) {
-            // if (name === "小哈学Java") {
+        if (accountsToUnfollow.includes(name)) {
             await child.nodeGestureClick()
             useLogStore().add({ images: [], text: `点击公众号:${name}` })
-            officialAccountList.splice(officialAccountList.indexOf(name), 1)
+            accountsToUnfollow.splice(accountsToUnfollow.indexOf(name), 1)
             return step.next(enterOfficialAccountProfile)
         }
-
     }
     return undefined
 }

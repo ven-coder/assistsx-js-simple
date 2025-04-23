@@ -8,9 +8,15 @@ import { start as startMoment } from '@/core/WechatCollectMoment'
 import { start as startWechatUnfollowOfficialAccount } from '@/core/WechatUnfollowOfficialAccount'
 import { start as startWechatCollectOfficialAccount } from '@/core/WechatCollectOfficialAccount'
 import { useNavigationStore } from '@/stores/navigationStore'
+import { onMounted } from 'vue'
 
 const router = useRouter()
 const stepStore = useStepStore()
+
+// 页面挂载时修改标题
+onMounted(() => {
+  document.title = 'AssistsX示例'
+})
 
 const startCollectAccountInfo = async () => {
   startAccountInfo()
