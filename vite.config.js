@@ -6,6 +6,11 @@ import path from 'path'
 export default defineConfig({
   plugins: [vue()],
   base: './', // 让静态资源使用相对路径
+  rollupOptions: {
+    output: {
+      inlineDynamicImports: true
+    }
+  },
   build: {
     assetsDir: 'assets', // 静态资源存放路径
     sourcemap: true // 生成 source map 以便调试

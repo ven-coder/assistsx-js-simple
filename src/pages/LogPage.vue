@@ -3,7 +3,7 @@ import { onMounted, onUnmounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import { useLogStore } from '../stores/logStore'
-import { Step, useStepStore } from 'ax-web-dev'
+import { Step, useStepStore } from 'assistsx'
 import type { LogItem } from '../stores/logStore'
 
 const router = useRouter()

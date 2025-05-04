@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AssistsX, NodeClassValue, sleep, Step } from 'ax-web-dev'
+import { AssistsX, NodeClassValue, sleep, Step } from 'assistsx'
 import { onMounted, ref, watch } from 'vue'
 import LogPage from './pages/LogPage.vue'
 import { useRouter } from 'vue-router'

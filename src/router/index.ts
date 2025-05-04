@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import HomePage from '../pages/HomePage.vue'
 import LogPage from '../pages/LogPage.vue'
 import UnfollowOfficialAccountPage from '../pages/UnfollowOfficialAccountPage.vue'
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/',

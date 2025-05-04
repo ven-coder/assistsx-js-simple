@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { AssistsX, NodeClassValue, sleep, Step } from 'ax-web-dev'
+import { AssistsX, NodeClassValue, sleep, Step } from 'assistsx'
 import { useRouter } from 'vue-router'
-import { useStepStore } from 'ax-web-dev'
+import { useStepStore } from 'assistsx'
 import { useLogStore } from '@/stores/logStore'
 import { start as startAccountInfo } from '@/core/WechatCollectAccountInfo'
 import { start as startMoment } from '@/core/WechatCollectMoment'
@@ -67,7 +67,6 @@ const test = async () => {
     <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
     <button type="button" @click="startCollectMoment">收集朋友圈</button>
     <button type="button" @click="startUnfollowOfficialAccount">批量取关公众号</button>
-    <button type="button" @click="startWechatUnfollowOfficialAccount">测试</button>
     <!-- <button type="button" @click="test">测试</button> -->
   </div>
 </template>
