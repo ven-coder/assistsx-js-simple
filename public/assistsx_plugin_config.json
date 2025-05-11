@@ -4,7 +4,7 @@
     "description": "AssistsX示例",
     "isShowOverlay": true,
     "needScreenCapture": true,
-    "packageName": "com.assistsx.example",
+    "packageName": "com.assistsx.example1",
     "main": "index.html",
     "icon": "vite.svg",
     "overlayTitle": "AssistsX示例"

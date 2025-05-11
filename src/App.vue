@@ -9,7 +9,7 @@ const router = useRouter()
 const navigationStore = useNavigationStore()
 // 页面挂载时修改标题
 onMounted(() => {
-  document.title = 'AssistsX示例'
+  document.title = 'Assists Web示例'
 })
 
 watch(() => navigationStore.targetRoute, (newRoute) => {

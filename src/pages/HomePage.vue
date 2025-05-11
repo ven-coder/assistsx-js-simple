@@ -15,7 +15,7 @@ const stepStore = useStepStore()
 
 // 页面挂载时修改标题
 onMounted(() => {
-  document.title = 'AssistsX示例'
+  document.title = 'Assists Web示例'
 })
 
 const startCollectAccountInfo = async () => {
@@ -61,13 +61,16 @@ const test = async () => {
   }
 }
 </script>
-
+·
 <template>
-  <div class="container">
-    <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
-    <button type="button" @click="startCollectMoment">收集朋友圈</button>
-    <button type="button" @click="startUnfollowOfficialAccount">批量取关公众号</button>
-    <!-- <button type="button" @click="test">测试</button> -->
+  <div style="color: #ffffff;">
+    当前页面及子页面都是通过vite构建的html页面
+    <div class="container">
+      <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
+      <button type="button" @click="startCollectMoment">收集朋友圈</button>
+      <button type="button" @click="startUnfollowOfficialAccount">批量取关公众号</button>
+      <!-- <button type="button" @click="test">测试</button> -->
+    </div>
   </div>
 </template>
 
