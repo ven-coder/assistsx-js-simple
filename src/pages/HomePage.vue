@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { AssistsX, NodeClassValue, sleep, Step } from 'assistsx'
+import { AssistsX, NodeClassValue, sleep, Step } from 'assistsx-js'
 import { useRouter } from 'vue-router'
-import { useStepStore } from 'assistsx'
+import { useStepStore } from 'assistsx-js'
 import { useLogStore } from '@/stores/logStore'
 import { start as startAccountInfo } from '@/core/WechatCollectAccountInfo'
 import { start as startMoment } from '@/core/WechatCollectMoment'

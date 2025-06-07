@@ -1,4 +1,4 @@
-import { NodeClassValue, Step } from "assistsx";
+import { NodeClassValue, Step } from "assistsx-js";
 import { useLogStore } from "../stores/logStore";
 import { setWechatEnterNext, launchWechat, wechatPackageName } from "./WechatEnter";
 import { useNavigationStore } from "../stores/navigationStore";

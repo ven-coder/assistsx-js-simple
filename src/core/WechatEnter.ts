@@ -1,4 +1,4 @@
-import { NodeClassValue, Step } from "assistsx";
+import { NodeClassValue, Step } from "assistsx-js";
 import { useLogStore } from "../stores/logStore";
 
 export const wechatPackageName = "com.tencent.mm";
