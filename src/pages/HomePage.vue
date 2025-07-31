@@ -39,26 +39,8 @@ const goToLogs = () => {
 const test = async () => {
   useLogStore().clearLogs()
   useNavigationStore().setTargetRoute('/logs')
-  const listNode = AssistsX.findById("com.tencent.mm:id/i3y", { filterClass: "android.widget.ListView" })[0]
-  const nodes = listNode.getChildren()
-  for (let i = 0; i < nodes.length; i++) {
-    const child = nodes[i]
-    if (child.className != NodeClassValue.LinearLayout) {
-      continue
-    }
-    const name = child.findById("com.tencent.mm:id/awx")[0].text
-    // if (officialAccountList.includes(name)) {
-    if (name === "考拉解析") {
-      const result = await child.nodeGestureClick()
-      if (result) {
-        useLogStore().add({ images: [], text: `点击公众号:${name}成功, ${child.isClickable}` })
-      } else {
-        useLogStore().add({ images: [], text: `点击公众号:${name}失败, ${child.isClickable}` })
-      }
-      break
-    }
-
-  }
+  const node = AssistsX.findByTextAllMatch('微信助手')[0]
+  useLogStore().add({ images: [], text: node?.text })
 }
 </script>
 ·
@@ -69,7 +51,7 @@ const test = async () => {
       <button type="button" @click="startCollectAccountInfo">获取微信账号信息</button>
       <button type="button" @click="startCollectMoment">收集朋友圈</button>
       <button type="button" @click="startUnfollowOfficialAccount">批量取关公众号</button>
-      <!-- <button type="button" @click="test">测试</button> -->
+      <button type="button" @click="test">测试</button>
     </div>
   </div>
 </template>
